@@ -2,6 +2,10 @@ import numpy as np
 import pandas as pd
 import matplotlib as plt
 from sklearn.impute import SimpleImputer
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import LabelEncoder
+
 
 df = pd.read_csv("Data.csv")
 
@@ -13,4 +17,9 @@ y = df.iloc[:, -1].values
 imputer = SimpleImputer(missing_values = np.nan, strategy = "mean")
 imputer.fit(x[:, 1:3])
 x[:, 1:3] = imputer.transform(x[:, 1:3])
-print(x)
+#print(x)
+
+ct = ColumnTransformer(transformers =[("encoder", OneHotEncoder(), [0])], remainder = "passthrough")
+x = np.array(ct.fit_transform(x))
+y = LabelEncoder().fit_transform(y)
+print(x, y)
